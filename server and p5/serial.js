@@ -7,7 +7,6 @@ var options = {
 }; // change the data rate to whatever you wish
 var inData;
 
-
 var socket = io.connect();
 let time;
 
@@ -22,13 +21,13 @@ let arr1 =[2,3,4,5]; // arranagement
 let arr2 = [2,3,4,5];
 
 //create an audio context
-	window.AudioContext = window.AudioContext || window.webkitAudioContext
-	var audioContext = new AudioContext()
+window.AudioContext = window.AudioContext || window.webkitAudioContext
+var audioContext = new AudioContext()
 
-	//set the context
-	StartAudioContext(audioContext, ".starterButton").then(function(){
-		document.querySelector("#isStarted").textContent = "Started"
-	})
+//set the context
+StartAudioContext(audioContext, ".starterButton").then(function(){
+  document.querySelector("#isStarted").textContent = "Started"
+})
 
 socket.on('connect', function() {
   console.log("Serial Connected");
@@ -51,7 +50,7 @@ let tick;
 
 function preload() {
   fontclock = loadFont('7segment.ttf');
-    tick = loadSound('tick.wav');
+  tick = loadSound('tick.wav');
 }
 
 function setup() {
@@ -94,29 +93,17 @@ function portClose() {
 }
 
 function draw() {
-  // if(inData) {
-  //   background(255);
-  //   text (inData,30,30);
-  // }
-  // if(time){
-  //     background(255);
-  //     textSize (50);
-  //     text (time,80,80);
-  // }
 
   background(0);
   fill (255);
   // ALWAYS SET ONCE BEFORE SHOW TO RESTARTS SECS VALUE
 
   if (time) {
-
-    // text(inData, 30, 30);
     let splitString = split(time, ',');
     state = int(splitString[0]);
     hours = splitString[1];
     mins = splitString[2];
     secs = int(splitString[3]);
-    // console.log(state, hours, mins, secs);
   }
 
   if (psecs > secs) {
@@ -126,21 +113,20 @@ function draw() {
     squcount = 0;
     tricount = 0;
     arr2 = shuffle(arr1);
-    // background(255,0,0);
   }
   count = millis() - reset;
-  // count = count / 1000;
 
+  // NORMAL CLOCK
   norcount = count / 1000;
   norcount = floor(norcount);
-  // text(hours + " : " + mins + " : " + norcount, 10, 30);
 
+  // SINE WAVE CLOCK
   i = map(count, 0, 60000, 0, 360);
   sineVal = sin(radians(i));
   sineVal = map(sineVal, 1, -1, -5, 5); // set interval
   sinecount = floor(count / 1000 + sineVal);
-  // text(hours + " : " + mins + " : " + sinecount, 10, 50);
 
+  // SQUARE WAVE CLOCK
   if (count > 30000) {
     sqVal = ((millis() - n) * 2)
   } else {
@@ -148,25 +134,15 @@ function draw() {
     n = millis();
   }
   squcount = floor(sqVal / 1000);
-  // text(hours + " : " + mins + " : " + squcount, 10, 70);
 
-  //   // this is the value that you should be incrementing at given point in time
-  // m = map (count % 60000,0,60000,2,0);
-  //   if (frameCount% 60 ==0) {
-  // tricount = tricount + m;
-  //   }
+  //  TRIANGLE WAVE CLOCK
   m = map (count,0,60000,0,90);
   triVal = sin(radians(m));
   tricount = floor(map(triVal, 0,1, 0,60)); // set interval
 
 
-  // text(hours + " : " + mins + " : " + tricount, 10, 90);
   psecs = secs;
 
-  // addzero(norcount);
-  // addzero(sinecount);
-  // addzero(squcount);
-  // addzero(tricount);
 
   if (norcount<10) {
     norcount = "0" + norcount;
@@ -182,8 +158,8 @@ function draw() {
   }
 
   //background text
-noStroke();
-fill(22);
+  noStroke();
+  fill(22);
   text(88 + ":" + 88 + ":" + 88, width / 2, height / 6 *   arr2[0] - (2048 / 7.5 / 2));
   text(88 + ":" + 88 + ":" + 88, width / 2, height / 6 *   arr2[1] - (2048 / 7.5 / 2));
   text(88 + ":" + 88 + ":" + 88, width / 2, height / 6 *  arr2[2] - (2048 / 7.5 / 2));
@@ -201,7 +177,7 @@ fill(22);
     if (state == 1) {
       strokeWeight(3);
       stroke(0);
-      fill(0);
+      fill(22);
       text(hours + "     ", width/2+18, height/6*2 - (2048/7.5/2));
       text(hours + "     ", width/2+18, height/6*3 - (2048/7.5/2));
       text(hours + "     ", width/2+18, height/6*4 - (2048/7.5/2));
@@ -210,7 +186,7 @@ fill(22);
     }else if (state ==2) {
       strokeWeight(3);
       stroke(0);
-      fill(0);
+      fill(22);
       text(mins, width/2, height/6*2 - (2048/7.5/2));
       text(mins, width/2, height/6*2 - (2048/7.5/2));
       text(mins, width/2, height/6*3 - (2048/7.5/2));
@@ -236,5 +212,4 @@ fill(22);
   psinecount = sinecount;
   psqucount = squcount;
   ptricount = tricount;
-
 }
